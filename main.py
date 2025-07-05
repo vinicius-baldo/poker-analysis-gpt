@@ -4,7 +4,6 @@ import openai
 import pygetwindow as gw
 from colorama import init
 
-
 from game_state import GameState
 from gui import GUI
 from hero_action import HeroAction

@@ -6,21 +6,15 @@ from colorama import Fore
 
 class PokerAssistant:
 
-    def __init__(
-        self, openai_client, hero_info, game_statem, hero_action
-    ):
+    def __init__(self, openai_client, hero_info, game_statem, hero_action):
 
         print("Initializing PokerAssistant...")
-
-
 
         self.client = openai_client
 
         self.hero_info = hero_info
 
         self.game_state = game_statem
-
-
 
         self.hero_action = hero_action
 
@@ -319,7 +313,9 @@ class PokerAssistant:
                         button_coordinates, extracted_action, action_amount_match
                     )
 
-                    print(f"Hero ACTION: {extracted_action} {action_amount_match} dollars. Go!")
+                    print(
+                        f"Hero ACTION: {extracted_action} {action_amount_match} dollars. Go!"
+                    )
                 else:
                     self.hero_action.execute_action(None, "Fold", None)
                     print(

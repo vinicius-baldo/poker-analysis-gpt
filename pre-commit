@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Pre-commit script to run code formatting tools
+# This script will be executed before each git commit
+
+echo "🔧 Running pre-commit checks..."
+
+# Check if black is installed
+if ! command -v black &> /dev/null; then
+    echo "❌ Error: black is not installed. Please install it with: brew install black"
+    exit 1
+fi
+
+# Check if isort is installed
+if ! command -v isort &> /dev/null; then
+    echo "❌ Error: isort is not installed. Please install it with: brew install isort"
+    exit 1
+fi
+
+# Get list of Python files that are staged for commit
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$')
+
+if [ -z "$STAGED_FILES" ]; then
+    echo "✅ No Python files staged for commit. Skipping formatting."
+    exit 0
+fi
+
+echo "📝 Formatting staged Python files..."
+
+# Run isort on staged files
+echo "🔄 Running isort..."
+isort $STAGED_FILES
+
+# Run black on staged files
+echo "🔄 Running black..."
+black $STAGED_FILES
+
+# Stage the formatted files
+echo "📦 Staging formatted files..."
+git add $STAGED_FILES
+
+echo "✅ Pre-commit checks completed successfully!"
+echo "🎨 Code has been formatted with black and isort" 
