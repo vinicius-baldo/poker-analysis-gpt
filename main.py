@@ -4,7 +4,7 @@ import openai
 import pygetwindow as gw
 from colorama import init
 
-from audio_player import AudioPlayer
+
 from game_state import GameState
 from gui import GUI
 from hero_action import HeroAction
@@ -36,15 +36,14 @@ def main():
 
     if poker_window is not None:
 
-        audio_player = AudioPlayer(openai_client)
         hero_action = HeroAction(poker_window)
 
         hero_info = HeroInfo()
         hero_hand_range = PokerHandRangeDetector()
 
-        game_state = GameState(hero_action, audio_player)
+        game_state = GameState(hero_action)
         poker_assistant = PokerAssistant(
-            openai_client, hero_info, game_state, hero_action, audio_player
+            openai_client, hero_info, game_state, hero_action
         )
 
         gui = GUI(game_state, poker_assistant)

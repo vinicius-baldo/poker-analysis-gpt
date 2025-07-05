@@ -7,9 +7,7 @@ import pygetwindow as gw
 
 class GameState:
 
-    def __init__(self, audio_player=None):
-
-        self.audio_player = audio_player
+    def __init__(self):
 
         self.log = []  # Initializing the log list
 

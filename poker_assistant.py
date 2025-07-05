@@ -1,19 +1,18 @@
 import json
 import time
 
-import pygame
 from colorama import Fore
 
 
 class PokerAssistant:
 
     def __init__(
-        self, openai_client, hero_info, game_statem, hero_action, audio_player
+        self, openai_client, hero_info, game_statem, hero_action
     ):
 
         print("Initializing PokerAssistant...")
 
-        pygame.init()  # Initialize the pygame module for audio playback
+
 
         self.client = openai_client
 
@@ -21,7 +20,7 @@ class PokerAssistant:
 
         self.game_state = game_statem
 
-        self.audio_player = audio_player
+
 
         self.hero_action = hero_action
 
@@ -320,9 +319,7 @@ class PokerAssistant:
                         button_coordinates, extracted_action, action_amount_match
                     )
 
-                    self.audio_player.play_speech(
-                        f"Hero ACTION: {extracted_action} {action_amount_match} dollars. Go!"
-                    )
+                    print(f"Hero ACTION: {extracted_action} {action_amount_match} dollars. Go!")
                 else:
                     self.hero_action.execute_action(None, "Fold", None)
                     print(
