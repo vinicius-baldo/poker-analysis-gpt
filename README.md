@@ -1,74 +1,314 @@
-# PokerGPT - GPT4 poker bot for Pokerstars
+# PokerGPT - AI-Powered Poker Analysis Tool
 
-PokerGPT is an advanced online poker-playing bot for Pokerstars(6-player Texas Hold'em, Cash game) that utilizes the OpenAI GPT-4 API for real-time game state analysis and decision-making.
-It has built-in GUI to visualize poker data + voice support to playback actions on the table.
+PokerGPT is a sophisticated poker analysis tool designed to help you improve your online poker game on PokerStars. It provides real-time analysis, hand strength evaluation, opponent range estimation, and strategic recommendations to enhance your poker skills through education and learning.
 
-![PokerGPT_GUI](https://github.com/HarperJonesGPT/PokerGPT/assets/154810617/8310109b-5086-470b-92ba-81854f132cb2)
+## 🚀 **Key Features**
 
-## Features
+### 🎯 **Real-time Game Analysis**
 
-- Real-time detection of game events by reading pixels on the screen.
-- Uses Tesseract OCR API to recognize cards, pot sizes, dealer button and all player actions.
-- Uses 'gpt-4-1106-preview' to analyze the game data and players in order to take appriopriate action(fold, check, raise, bet etc).
-- Advanced GPT-4 prompt engineering for analyzing game states, player exploitation and strategizing.
-- Simulates mouse clicks within the Pokerstars client for automated gameplay.
+- **Live Game State Monitoring**: Continuously reads the poker table using OCR and computer vision
+- **Dynamic Player Support**: Supports 2-9 players at the table (configurable)
+- **Position Tracking**: Automatically calculates your position relative to the dealer
+- **Action History**: Tracks all player actions and betting patterns
+
+### 🤖 **AI-Powered Insights**
+
+- **GPT-4 Integration**: Uses OpenAI's GPT-4 for advanced poker analysis
+- **Strategic Recommendations**: Provides detailed analysis of game situations
+- **Player Tendency Analysis**: Identifies opponent playing styles and patterns
+- **Hand Strength Evaluation**: Analyzes your hand relative to the board and opponent ranges
+
+### 📊 **Professional Hand Strength Analysis**
+
+- **Complete Hand Rankings**: Based on professional poker hand charts
+- **Hand Categories**: Premium, Strong, Medium, Speculative, Weak, Trash
+- **Position-Adjusted Ranges**: Different hand ranges for different positions
+- **Hand Notation**: Converts cards to poker notation (e.g., 'AKs', 'TTo')
+- **Strength Scoring**: Numerical strength ratings for all starting hands
+
+### 🎲 **Advanced Range Analysis**
+
+- **Action-Based Ranges**: Estimate opponent hands based on their actions
+- **Position-Based Ranges**: Different ranges for different positions
+- **Bet Sizing Analysis**: Adjust ranges based on bet sizes
+- **Exploitation Opportunities**: Identify how to exploit opponent tendencies
+
+### 👥 **Player Tendency Analysis**
+
+- **Real-time Player Profiling**: Track player behavior and tendencies
+- **Playing Style Classification**: Tight-Passive, Loose-Aggressive, Maniac, etc.
+- **VPIP/PFR/AF Tracking**: Professional poker statistics
+- **Betting Pattern Analysis**: Small, medium, large bet preferences
+- **Position-Based Tendencies**: How players act from different positions
+- **Exploitation Strategies**: Specific advice for each player type
+- **Session History**: Persistent player profiles across sessions
+
+### 🃏 **Board Texture Analysis**
+
+- **Board Evaluation**: Analyze paired, suited, connected boards
+- **Draw Analysis**: Identify flush draws, straight draws, and outs
+- **Post-Flop Recommendations**: Action recommendations for post-flop play
+- **Hand Strength Evolution**: How your hand strength changes with the board
+
+### 📊 **Comprehensive Dashboard**
+
+- **Real-time GUI**: Live updates every 500ms for fast response
+- **Player Information Table**: Shows all players' cards, actions, stack sizes, and playing styles
+- **Game State Display**: Current board stage, pot size, dealer position, and more
+- **Hand Strength Analysis**: Detailed analysis of your hand strength and playability
+- **Opponent Range Analysis**: Estimated hand ranges for all opponents
+- **Player Tendency Analysis**: Real-time player profiling and exploitation strategies
+- **Board Texture Analysis**: How the board affects hand strength
+- **Quick Strategic Tips**: Position-based and situation-based advice
+- **Live Notifications**: Real-time text alerts for game events
+- **Game Log**: Complete history of all actions and events
+
+### 🔔 **Text-Based Notifications**
+
+- **Live Notifications**: Real-time text notifications for game events
+- **Action Alerts**: Immediate display of player actions and amounts
+- **Board Stage Updates**: Clear indication of game progression
+- **Hero Role Notifications**: Your position and role updates
+- **Fast Response**: 500ms update frequency for immediate feedback
+
+### 🛡️ **Educational Focus**
+
+- **No Automated Actions**: Completely safe - only provides analysis and recommendations
+- **Learning Tool**: Designed to help you understand poker concepts and improve your game
+- **Professional Standards**: Based on widely-used poker hand strength charts and strategies
 
 ## Prerequisites
 
 - Python 3.8 or higher
-- Access to OpenAI GPT-4 API 
+- Access to OpenAI GPT-4 API
 - Tesseract OCR for text recognition
-- Pokerstars client
+- PokerStars client
 
 ## Installation
 
-1. Clone the repository to your local machine.
-2. Install the required Python dependencies by running `pip install -r requirements.txt`.
-3. Set up your OpenAI API key in the `pokergpt.env` file. (register free account at https://openai.com/ and get your API key here: https://platform.openai.com/api-keys)
-4. Make sure Tesseract OCR is installed and its path is correctly set in the scripts(Tesseract is included and path set).
+1. **Clone or download** the project files
+2. **Install dependencies**: `pip install -r requirements.txt`
+3. **Set up OpenAI API key** in the `pokergpt.env` file:
+   ```
+   OPENAI_API_KEY=your_api_key_here
+   ```
+4. **Ensure Tesseract OCR** is installed (included in the project)
 
-## PokerStars client (Visual) setup:
-1. Since this bot reads all of the data from the poker client window, you will need to setup the visuals excactly like in this image:
-2. Disable all animations for Pokerstars client in the table settings.
-![PokerTable2](https://github.com/HarperJonesGPT/PokerGPT/assets/154810617/ba0a7bc5-d2d1-4237-bfd8-015ca2ca14e9)
+## PokerStars Setup
 
+1. **Open PokerStars client** and ensure it's visible on screen
+2. **Disable animations** in table settings for better detection
+3. **Use standard table layout** for optimal detection
 
 ## Usage
 
-To start the PokerGPT, follow these steps:
+### Starting the Analyzer
 
-1. Open Pokerstars client and ensure it's visible on the screen.
-2. Run `main.py` to initiate the bot: `python main.py`.
-3. Enter your own player number (player numbers start from the bottom of the table and goes clockwise 1(bottom), 2(bottom-left), 3(top-eft), 4(top), 5(top-right), 6(bottom-right))
-4. The bot will automatically locate the poker window and start playing based on the GPT-4 strategy analysis.
+```bash
+python poker_analyzer.py
+```
 
+### Configuration
 
-## Structure
+1. **Enter your player number** (1-9, starting from bottom of table)
+2. **Specify maximum players** at the table (2-9)
+3. **The analyzer will automatically**:
+   - Locate the PokerStars window
+   - Resize it to optimal dimensions
+   - Start monitoring the game
+   - Provide comprehensive analysis
 
-- `audio_player.py`: Handles audio feedback from the bot.
-- `game_state.py`: Manages the current state of the game.
-- `gui.py`: Provides a graphical user interface for monitoring the bot's actions.
-- `hero_action.py`: Contains logic for determining the hero's actions.
-- `hero_hand_range.py`: Assesses hand ranges for the hero.
-- `hero_info.py`: Collects information about the hero's current state.
-- `main.py`: Entry point for running the bot.
-- `poker_assistant.py`: Interfaces with OpenAI's API to analyze the game state and decide on actions.
-- `read_poker_table.py`: Uses OCR and pixel detection to read the table state.
+### Understanding the Interface
+
+#### **Player Information Table**
+
+- **Player**: Player number/name
+- **Status**: Active/Inactive
+- **Role**: Dealer, Small Blind, Big Blind, etc.
+- **Cards**: Visible cards (if any)
+- **Turn**: Whether it's their turn
+- **Action**: Last action taken
+- **Amount**: Bet/raise amount
+- **Stack Size**: Current chip stack
+- **Play Style**: Identified playing style
+- **Strategy**: Exploitation strategy
+
+#### **Game State Information**
+
+- **Total Players**: Number of active players
+- **Hero Cards**: Your hole cards
+- **Community Cards**: Board cards (flop, turn, river)
+- **Board Stage**: Pre-flop, Flop, Turn, or River
+- **Total Pot Size**: Current pot amount
+- **Dealer Position**: Which player is dealer
+- **Hero Position**: Your position relative to dealer
+- **Rounds**: Number of hands played
+
+#### **Analysis Sections**
+
+- **AI Analysis & Recommendations**: Detailed GPT-4 analysis with hand strength
+- **Hand Strength Analysis**: Professional hand evaluation and recommendations
+- **Opponent Range Analysis**: Estimated hand ranges for all opponents
+- **Player Tendency Analysis**: Real-time player profiling and exploitation strategies
+- **Board Texture Analysis**: How the board affects hand strength
+- **Quick Strategic Tips**: Position-based advice
+- **Game Log**: Complete action history
+
+## Hand Strength Analysis Features
+
+### 🎯 **Pre-Flop Analysis**
+
+- **Hand Notation**: Converts your cards to poker notation (e.g., 'AKs', 'TTo')
+- **Strength Rating**: Numerical strength score based on professional charts
+- **Category Classification**: Premium, Strong, Medium, Speculative, Weak, Trash
+- **Playability Assessment**: Should you play this hand in current situation?
+- **Position-Based Ranges**: Different recommendations for different positions
+- **Stack-to-Pot Analysis**: Adjusts recommendations based on SPR
+
+### 🎲 **Opponent Range Analysis**
+
+- **Action-Based Estimation**: Estimates opponent hands based on their actions
+- **Position-Based Ranges**: Different ranges for different positions
+- **Bet Sizing Impact**: Adjusts ranges based on bet sizes
+- **Exploitation Opportunities**: Identifies how to exploit opponent tendencies
+- **Range Descriptions**: Human-readable descriptions of opponent ranges
+
+### 🃏 **Post-Flop Analysis**
+
+- **Board Texture Evaluation**: Analyzes paired, suited, connected boards
+- **Hand Strength Evolution**: How your hand strength changes with the board
+- **Draw Analysis**: Identifies flush draws, straight draws, and calculates outs
+- **Action Recommendations**: Specific actions based on hand strength and position
+- **Pot Odds Calculation**: Calculates pot odds for calling decisions
+
+## How It Helps Improve Your Game
+
+### 📈 **Learning Opportunities**
+
+- **Understand Hand Strength**: Learn professional hand rankings and categories
+- **Position Play**: Learn how position affects hand playability
+- **Range Analysis**: Learn to think in terms of hand ranges
+- **Board Texture**: Understand how board texture affects hand strength
+- **Pot Odds**: Learn when calls are profitable
+- **Exploitation**: Develop strategies against different player types
+
+### 🎯 **Strategic Development**
+
+- **Hand Selection**: Learn which hands to play in which positions
+- **Bet Sizing**: Understand optimal bet sizing based on hand strength
+- **Range vs Range**: Learn to think about hand ranges rather than specific hands
+- **Board Reading**: Analyze how the board affects your hand and opponents' ranges
+- **Draw Evaluation**: Understand drawing hands and implied odds
+
+### 🧠 **Decision Making**
+
+- **Real-time Feedback**: Get analysis as the game happens
+- **Historical Context**: Track how your decisions perform over time
+- **Pattern Recognition**: Identify recurring situations and optimal responses
+- **Professional Standards**: Learn from professional hand strength charts
+
+## Technical Features
+
+### 🔧 **Hand Strength Engine**
+
+- **Professional Charts**: Based on widely-used poker hand strength charts
+- **Dynamic Ranges**: Adjusts based on position, stack size, and number of players
+- **Real-time Analysis**: Updates analysis as game state changes
+- **Comprehensive Coverage**: Handles all 169 possible starting hands
+
+### 📊 **Range Analysis Engine**
+
+- **Action-Based Estimation**: Uses opponent actions to estimate ranges
+- **Position-Based Adjustments**: Different ranges for different positions
+- **Bet Sizing Analysis**: Considers bet sizes in range estimation
+- **Exploitation Identification**: Finds opportunities to exploit opponent tendencies
+
+### 🎲 **Board Analysis Engine**
+
+- **Texture Recognition**: Identifies board characteristics (paired, suited, connected)
+- **Draw Calculation**: Calculates potential draws and outs
+- **Hand Evolution**: Tracks how hand strength changes with the board
+- **Post-Flop Strategy**: Provides specific recommendations for post-flop play
 
 ## Limitations
-- Dependant on the Pokerstars client window size (PokerGPT automatically resizes to small window)
-- Might not work on all screen resolutions (tested on '1920 x 1080' pixel screen resolution, Windows 11)
-- Works only in Pokerstars 6-Player table.
-- Image reading(OCR) speed is dependant on your CPU.
 
-## Contributing
+- **Screen Resolution**: Tested on 1920x1080, may need adjustments for other resolutions
+- **Table Layout**: Requires specific PokerStars table settings
+- **OCR Accuracy**: Depends on screen clarity and text recognition
+- **API Dependencies**: Requires active internet connection for GPT-4 analysis
+- **Hand Strength**: Based on general charts, may not account for specific game dynamics
 
-Contributions to PokerGPT are welcome!
+## Troubleshooting
 
-## License
+### Common Issues
 
-This project is licensed under the MIT License - see the `LICENSE.md` file for details.
+1. **"Poker client window NOT Found"**
+
+   - Ensure PokerStars is open and visible
+   - Check that the window title contains "No Limit" and "$" or "Money"
+
+2. **Poor text recognition**
+
+   - Disable animations in PokerStars settings
+   - Ensure good screen contrast
+   - Check Tesseract installation
+
+3. **Analysis not updating**
+
+   - Verify OpenAI API key is set correctly
+   - Check internet connection
+   - Ensure API credits are available
+
+4. **Hand strength analysis errors**
+   - Ensure hero cards are properly detected
+   - Check card format (should be like "Ah", "Ks", etc.)
+   - Verify position calculation
+
+### Performance Tips
+
+- **Close unnecessary applications** to improve OCR speed
+- **Use SSD storage** for faster file operations
+- **Ensure adequate RAM** for smooth operation
+- **Update regularly** for best hand strength analysis
+
+## Educational Use
+
+This tool is perfect for:
+
+- **Poker beginners** learning hand strength fundamentals
+- **Intermediate players** improving their range analysis
+- **Advanced players** fine-tuning their game theory
+- **Coaches** teaching poker concepts with professional charts
+- **Students** studying game theory and hand ranges
+
+## Legal Notice
+
+This tool is for **educational and analysis purposes only**. It does not:
+
+- Automate any poker actions
+- Interfere with game play
+- Violate PokerStars terms of service
+- Provide unfair advantages
 
 ## Support
 
-I do not provide any further support for this project. If you can't figure it out, it's not for you.
+For questions or issues:
+
+1. Check the troubleshooting section above
+2. Ensure all prerequisites are properly installed
+3. Verify hand strength analysis is working correctly
+
+## Contributing
+
+Contributions are welcome! Focus areas:
+
+- Improved hand strength algorithms
+- Enhanced range analysis
+- Better board texture recognition
+- UI/UX improvements
+- Educational content
+- Additional hand strength charts
+
+---
+
+**Remember**: This tool is designed to help you learn and improve your poker skills through comprehensive analysis and education, not to play the game for you. Use it responsibly and always make your own decisions at the poker table.
