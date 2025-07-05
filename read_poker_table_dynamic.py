@@ -663,6 +663,50 @@ class ReadPokerTableDynamic:
             self.detect_total_pot_size()
             time.sleep(0.6)
 
+    def continuous_detection_tournament_info(self):
+        """Continuously detect tournament information."""
+        while not self.shutdown_flag.is_set():
+            if not self.window:
+                time.sleep(0.2)
+                continue
+
+            self.detect_tournament_info()
+            time.sleep(5.0)  # Check tournament info every 5 seconds
+
+    def detect_tournament_info(self):
+        """Detect and update tournament information."""
+        try:
+            # Extract tournament info from window title
+            if self.game_state.extract_blinds_from_title():
+                # Recalculate stack-to-blind ratios
+                self.game_state.calculate_stack_to_blind_ratios()
+
+                # Update tournament analysis
+                tournament_analysis = self.game_state.get_tournament_analysis()
+
+                # Log tournament changes
+                if tournament_analysis["is_tournament"]:
+                    print(f"{Fore.CYAN}Tournament Info Updated:")
+                    print(f"  Stage: {tournament_analysis['tournament_stage']}")
+                    print(f"  Blind Level: {tournament_analysis['blind_level']}")
+                    print(
+                        f"  Hero Stack/BB: {tournament_analysis['hero_stack_to_blind_ratio']}"
+                    )
+                    print(
+                        f"  Avg Stack/BB: {tournament_analysis['average_stack_to_blind_ratio']}"
+                    )
+                    print(
+                        f"  Duration: {tournament_analysis['tournament_duration']} minutes"
+                    )
+                    if tournament_analysis["players_remaining"] > 0:
+                        print(
+                            f"  Players Left: {tournament_analysis['players_remaining']}"
+                        )
+                    print(f"{Fore.RESET}")
+
+        except Exception as e:
+            print(f"Error in detect_tournament_info: {e}")
+
     def initiate_shutdown(self):
         """Initiate the shutdown process."""
         print("Shutdown initiated...")
@@ -707,13 +751,22 @@ class ReadPokerTableDynamic:
         pot_detection_thread = threading.Thread(
             target=self.continuous_detection_total_pot_size
         )
+        tournament_detection_thread = threading.Thread(
+            target=self.continuous_detection_tournament_info
+        )
 
         self.threads.extend(
-            [turn_detection_thread, dealer_detection_thread, pot_detection_thread]
+            [
+                turn_detection_thread,
+                dealer_detection_thread,
+                pot_detection_thread,
+                tournament_detection_thread,
+            ]
         )
 
         turn_detection_thread.start()
         dealer_detection_thread.start()
         pot_detection_thread.start()
+        tournament_detection_thread.start()
 
         print(f"Started detection for {self.max_players} players")

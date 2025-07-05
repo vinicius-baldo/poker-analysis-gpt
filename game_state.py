@@ -38,6 +38,18 @@ class GameState:
             0  # Big blind(BB) value calculated at beginning of the new round
         )
 
+        # Tournament information
+        self.tournament_start_time = None  # When tournament started
+        self.tournament_duration = 0  # Current tournament duration in minutes
+        self.tournament_stage = "Unknown"  # Early, Middle, Late, Final Table
+        self.prize_pool = 0  # Total prize pool if available
+        self.players_remaining = 0  # Number of players left in tournament
+        self.hero_stack_to_blind_ratio = 0  # Hero's stack relative to big blind
+        self.average_stack_to_blind_ratio = 0  # Average stack relative to big blind
+        self.blind_level = 1  # Current blind level number
+        self.next_blind_level_time = 0  # Minutes until next blind level
+        self.is_tournament = False  # Whether this is a tournament or cash game
+
         self.hero_total_hands_dealt = 0  # Total hands health to hero player *TODO*
 
         self.hero_hands_played = (
@@ -75,18 +87,135 @@ class GameState:
         self.betting_history = []  # History of all player hands *DONE*
 
     def extract_blinds_from_title(self):
+        """Extract blind levels and tournament information from window title."""
         title_contains = "No Limit"
         windows = gw.getWindowsWithTitle(title_contains)
 
         for window in windows:
-            # Find all monetary amounts (assuming they follow a '$' symbol)
-            amounts = re.findall(r"\$(\d+\.?\d*)", window.title)
+            title = window.title
+            print(f"Analyzing window title: {title}")
+
+            # Check if this is a tournament
+            self.is_tournament = any(
+                keyword in title.lower()
+                for keyword in ["tournament", "tourney", "mtt", "sit & go", "sng"]
+            )
+
+            # Extract blind levels
+            amounts = re.findall(r"\$(\d+\.?\d*)", title)
             if amounts and len(amounts) >= 2:
-                # Assuming the first amount is the small blind and the second is the big blind
                 self.small_blind = float(amounts[0])
                 self.big_blind = float(amounts[1])
+
+                # Try to extract blind level number
+                blind_level_match = re.search(r"level\s*(\d+)", title.lower())
+                if blind_level_match:
+                    self.blind_level = int(blind_level_match.group(1))
+
+                # Extract tournament time if available
+                time_match = re.search(r"(\d{1,2}):(\d{2})", title)
+                if time_match:
+                    hours, minutes = int(time_match.group(1)), int(time_match.group(2))
+                    self.tournament_duration = hours * 60 + minutes
+
+                    # Determine tournament stage based on time
+                    if self.tournament_duration < 60:  # Less than 1 hour
+                        self.tournament_stage = "Early"
+                    elif self.tournament_duration < 180:  # Less than 3 hours
+                        self.tournament_stage = "Middle"
+                    elif self.tournament_duration < 300:  # Less than 5 hours
+                        self.tournament_stage = "Late"
+                    else:
+                        self.tournament_stage = "Final Table"
+
+                # Extract prize pool if available
+                prize_match = re.search(r"prize.*?\$([\d,]+)", title.lower())
+                if prize_match:
+                    prize_str = prize_match.group(1).replace(",", "")
+                    self.prize_pool = float(prize_str)
+
+                # Extract players remaining if available
+                players_match = re.search(r"(\d+)\s*players?\s*left", title.lower())
+                if players_match:
+                    self.players_remaining = int(players_match.group(1))
+
+                print(
+                    f"Game Type: {'Tournament' if self.is_tournament else 'Cash Game'}"
+                )
                 print(f"Small Blind: ${self.small_blind}, Big Blind: ${self.big_blind}")
+                if self.is_tournament:
+                    print(f"Tournament Stage: {self.tournament_stage}")
+                    print(f"Duration: {self.tournament_duration} minutes")
+                    print(f"Blind Level: {self.blind_level}")
+                    if self.prize_pool > 0:
+                        print(f"Prize Pool: ${self.prize_pool}")
+                    if self.players_remaining > 0:
+                        print(f"Players Remaining: {self.players_remaining}")
+
                 return True
+
+        return False
+
+    def calculate_stack_to_blind_ratios(self):
+        """Calculate stack-to-blind ratios for hero and average of all players."""
+        if self.big_blind <= 0:
+            return
+
+        # Calculate hero's stack-to-blind ratio
+        hero_stack = self.players.get(self.hero_player_number, {}).get("stack_size", 0)
+        if hero_stack > 0:
+            self.hero_stack_to_blind_ratio = hero_stack / self.big_blind
+
+        # Calculate average stack-to-blind ratio
+        active_stacks = []
+        for player_num, player_data in self.players.items():
+            if (
+                player_data.get("status") == "Active"
+                and player_data.get("stack_size", 0) > 0
+            ):
+                active_stacks.append(player_data["stack_size"])
+
+        if active_stacks:
+            avg_stack = sum(active_stacks) / len(active_stacks)
+            self.average_stack_to_blind_ratio = avg_stack / self.big_blind
+
+    def get_tournament_analysis(self):
+        """Get comprehensive tournament analysis for AI recommendations."""
+        analysis = {
+            "is_tournament": self.is_tournament,
+            "tournament_stage": self.tournament_stage,
+            "blind_level": self.blind_level,
+            "hero_stack_to_blind_ratio": round(self.hero_stack_to_blind_ratio, 2),
+            "average_stack_to_blind_ratio": round(self.average_stack_to_blind_ratio, 2),
+            "tournament_duration": self.tournament_duration,
+            "players_remaining": self.players_remaining,
+            "prize_pool": self.prize_pool,
+            "small_blind": self.small_blind,
+            "big_blind": self.big_blind,
+        }
+
+        # Add strategic insights based on tournament stage
+        if self.is_tournament:
+            if self.tournament_stage == "Early":
+                analysis["strategy_focus"] = "Build stack, avoid marginal spots"
+            elif self.tournament_stage == "Middle":
+                analysis["strategy_focus"] = (
+                    "Accumulate chips, position becomes crucial"
+                )
+            elif self.tournament_stage == "Late":
+                analysis["strategy_focus"] = "Survival and ICM considerations"
+            elif self.tournament_stage == "Final Table":
+                analysis["strategy_focus"] = "Prize pool jumps, tight play"
+
+            # Add stack depth analysis
+            if self.hero_stack_to_blind_ratio < 10:
+                analysis["stack_depth"] = "Short stack - push/fold decisions"
+            elif self.hero_stack_to_blind_ratio < 25:
+                analysis["stack_depth"] = "Medium stack - standard play"
+            else:
+                analysis["stack_depth"] = "Deep stack - post-flop play"
+
+        return analysis
 
     # Method to add an entry to the log
     def add_log_entry(self, data):
@@ -546,6 +675,9 @@ class GameState:
             rounded_stack_size = round(stack_size, 2)
             self.players[player_number]["stack_size"] = rounded_stack_size
             # self.add_log_entry({'method': 'update_player_stack', 'player_number': player_number, 'stack_size': rounded_stack_size})
+
+            # Recalculate stack-to-blind ratios when stack sizes change
+            self.calculate_stack_to_blind_ratios()
 
         # Update player won amount
         if won_amount is not None:

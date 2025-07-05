@@ -61,7 +61,42 @@ class PokerAnalyzerAssistant:
                             player_data + "\n----------------------\n"
                         )
 
+        # Get tournament analysis
+        tournament_analysis = self.game_state.get_tournament_analysis()
+        tournament_info = ""
+        if tournament_analysis["is_tournament"]:
+            tournament_info = f"""
+                        #Tournament Information:
+                        '''
+                        Game Type: Tournament
+                        Tournament Stage: {tournament_analysis['tournament_stage']}
+                        Blind Level: {tournament_analysis['blind_level']}
+                        Tournament Duration: {tournament_analysis['tournament_duration']} minutes
+                        Players Remaining: {tournament_analysis['players_remaining']}
+                        Prize Pool: ${tournament_analysis['prize_pool']}
+                        
+                        Stack Analysis:
+                        - Hero Stack/BB Ratio: {tournament_analysis['hero_stack_to_blind_ratio']}
+                        - Average Stack/BB Ratio: {tournament_analysis['average_stack_to_blind_ratio']}
+                        - Stack Depth: {tournament_analysis.get('stack_depth', 'Unknown')}
+                        - Strategy Focus: {tournament_analysis.get('strategy_focus', 'Standard play')}
+                        
+                        Blind Levels: SB ${tournament_analysis['small_blind']} / BB ${tournament_analysis['big_blind']}
+                        '''
+                        """
+        else:
+            tournament_info = """
+                        #Game Information:
+                        '''
+                        Game Type: Cash Game
+                        Blind Levels: Extracted from window title
+                        '''
+                        """
+
         user_prompt = f"""
+                        {tournament_info}
+                        ---------------------------
+
                         #Hero Actions History:
                         '''
                         {hero_round_actions_history}
@@ -113,6 +148,8 @@ class PokerAnalyzerAssistant:
                         #ANALYSIS GUIDELINES:
 
                         - GAME STATE ANALYSIS: Analyze the current board, pot size, position, and player actions
+                        - TOURNAMENT CONSIDERATIONS: For tournaments, consider ICM, stack depth, and tournament stage
+                        - STACK-TO-BLIND ANALYSIS: Evaluate stack depth and its impact on strategy
                         - PLAYER TENDENCIES: Identify patterns in opponent behavior and playing styles
                         - POSITIONAL AWARENESS: Consider the impact of position on decision making
                         - POT ODDS: Calculate and explain pot odds when relevant
@@ -130,6 +167,8 @@ class PokerAnalyzerAssistant:
                         - Pot Size: $[amount]
                         - Position: [Hero's position relative to dealer]
                         - Current Action: [What's happening now]
+                        - Tournament Stage: [Early/Middle/Late/Final Table] (if applicable)
+                        - Stack Depth: [Short/Medium/Deep stack analysis]
 
                         ## OPPONENT ANALYSIS
                         - Player Tendencies: [Describe each active opponent's style]
@@ -145,6 +184,7 @@ class PokerAnalyzerAssistant:
                         - Recommended Action: [Fold/Call/Raise/Check]
                         - Bet Sizing: [If raising, suggest amount]
                         - Reasoning: [Why this action is recommended]
+                        - Tournament Considerations: [ICM, stack depth, stage-specific advice]
                         - Alternative Lines: [Other viable options]
 
                         ## RISK ASSESSMENT

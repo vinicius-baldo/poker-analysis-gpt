@@ -251,6 +251,44 @@ class GUIAnalyzer:
         )
         self.round_count_info.grid(row=8, column=1, sticky="w", **padding)
 
+        # Tournament Information
+        self.tournament_label = tk.Label(
+            self.root,
+            text="Tournament Info",
+            font=self.fontStyle,
+            bg="#171821",
+            fg="white",
+        )
+        self.tournament_label.grid(row=9, column=0, sticky="w", **padding)
+        self.tournament_info = tk.Text(
+            self.root,
+            height=3,
+            width=input_width * 3,
+            bg="#171821",
+            fg="white",
+            font=self.fontStyle,
+        )
+        self.tournament_info.grid(row=9, column=1, sticky="w", **padding)
+
+        # Stack Analysis
+        self.stack_analysis_label = tk.Label(
+            self.root,
+            text="Stack Analysis",
+            font=self.fontStyle,
+            bg="#171821",
+            fg="white",
+        )
+        self.stack_analysis_label.grid(row=10, column=0, sticky="w", **padding)
+        self.stack_analysis_info = tk.Text(
+            self.root,
+            height=2,
+            width=input_width * 3,
+            bg="#171821",
+            fg="white",
+            font=self.fontStyle,
+        )
+        self.stack_analysis_info.grid(row=10, column=1, sticky="w", **padding)
+
     def create_analysis_section(self, padding, analysisFont):
         """Create the analysis section."""
         # Analysis Label
@@ -261,7 +299,7 @@ class GUIAnalyzer:
             bg="#171821",
             fg="#00ff00",
         )
-        self.analysis_label.grid(row=9, column=0, columnspan=2, sticky="w", **padding)
+        self.analysis_label.grid(row=11, column=0, columnspan=2, sticky="w", **padding)
 
         # Analysis Text Area
         self.analysis_info = scrolledtext.ScrolledText(
@@ -273,7 +311,7 @@ class GUIAnalyzer:
             font=analysisFont,
         )
         self.analysis_info.grid(
-            row=10, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
+            row=12, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
         )
 
     def create_opponent_analysis_section(self, padding, analysisFont):
@@ -287,7 +325,7 @@ class GUIAnalyzer:
             fg="#ff6600",
         )
         self.opponent_analysis_label.grid(
-            row=11, column=0, columnspan=2, sticky="w", **padding
+            row=13, column=0, columnspan=2, sticky="w", **padding
         )
 
         # Opponent Analysis Text Area
@@ -295,7 +333,7 @@ class GUIAnalyzer:
             self.root, height=8, width=80, bg="#171821", fg="#ff6600", font=analysisFont
         )
         self.opponent_analysis_info.grid(
-            row=12, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
+            row=14, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
         )
 
     def create_player_analysis_section(self, padding, analysisFont):
@@ -309,7 +347,7 @@ class GUIAnalyzer:
             fg="#00ffff",
         )
         self.player_analysis_label.grid(
-            row=13, column=0, columnspan=2, sticky="w", **padding
+            row=15, column=0, columnspan=2, sticky="w", **padding
         )
 
         # Player Analysis Text Area
@@ -317,7 +355,7 @@ class GUIAnalyzer:
             self.root, height=6, width=80, bg="#171821", fg="#00ffff", font=analysisFont
         )
         self.player_analysis_info.grid(
-            row=14, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
+            row=16, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
         )
 
     def create_quick_advice_section(self, padding, analysisFont):
@@ -331,7 +369,7 @@ class GUIAnalyzer:
             fg="#ffff00",
         )
         self.quick_advice_label.grid(
-            row=15, column=0, columnspan=2, sticky="w", **padding
+            row=17, column=0, columnspan=2, sticky="w", **padding
         )
 
         # Quick Advice Text Area
@@ -339,7 +377,7 @@ class GUIAnalyzer:
             self.root, height=6, width=80, bg="#171821", fg="#ffff00", font=analysisFont
         )
         self.quick_advice_info.grid(
-            row=16, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
+            row=18, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
         )
 
     def create_log_section(self, padding, analysisFont):
@@ -348,14 +386,14 @@ class GUIAnalyzer:
         self.log_label = tk.Label(
             self.root, text="Game Log", font=self.fontStyle, bg="#171821", fg="white"
         )
-        self.log_label.grid(row=17, column=0, columnspan=2, sticky="w", **padding)
+        self.log_label.grid(row=19, column=0, columnspan=2, sticky="w", **padding)
 
         # Log Text Area
         self.log_info = scrolledtext.ScrolledText(
             self.root, height=8, width=80, bg="#171821", fg="white", font=analysisFont
         )
         self.log_info.grid(
-            row=18, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
+            row=20, column=0, columnspan=5, pady=10, padx=10, sticky="nw"
         )
 
     def create_notifications_section(self, padding, analysisFont):
@@ -369,7 +407,7 @@ class GUIAnalyzer:
             fg="#ff6b6b",
         )
         self.notifications_label.grid(
-            row=19, column=0, columnspan=2, sticky="w", **padding
+            row=21, column=0, columnspan=2, sticky="w", **padding
         )
 
         # Notifications Text Area
@@ -506,6 +544,37 @@ class GUIAnalyzer:
         # Update the round count
         self.round_count_info.delete("1.0", tk.END)
         self.round_count_info.insert(tk.END, str(self.game_state.round_count))
+
+        # Update tournament information
+        tournament_analysis = self.game_state.get_tournament_analysis()
+
+        if tournament_analysis["is_tournament"]:
+            tournament_text = f"""Game Type: Tournament
+Stage: {tournament_analysis['tournament_stage']}
+Blind Level: {tournament_analysis['blind_level']}
+Duration: {tournament_analysis['tournament_duration']} minutes"""
+
+            if tournament_analysis["players_remaining"] > 0:
+                tournament_text += (
+                    f"\nPlayers Left: {tournament_analysis['players_remaining']}"
+                )
+
+            if tournament_analysis["prize_pool"] > 0:
+                tournament_text += f"\nPrize Pool: ${tournament_analysis['prize_pool']}"
+        else:
+            tournament_text = "Game Type: Cash Game"
+
+        self.tournament_info.delete("1.0", tk.END)
+        self.tournament_info.insert(tk.END, tournament_text)
+
+        # Update stack analysis
+        stack_text = f"""Hero Stack/BB: {tournament_analysis['hero_stack_to_blind_ratio']}
+Avg Stack/BB: {tournament_analysis['average_stack_to_blind_ratio']}
+Stack Depth: {tournament_analysis.get('stack_depth', 'Unknown')}
+Strategy Focus: {tournament_analysis.get('strategy_focus', 'Standard play')}"""
+
+        self.stack_analysis_info.delete("1.0", tk.END)
+        self.stack_analysis_info.insert(tk.END, stack_text)
 
     def update_analysis(self):
         """Update the analysis section."""
