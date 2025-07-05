@@ -6,7 +6,7 @@ from colorama import Fore
 
 class PokerAssistant:
 
-    def __init__(self, openai_client, hero_info, game_statem, hero_action):
+    def __init__(self, openai_client, hero_info, game_statem):
 
         print("Initializing PokerAssistant...")
 
@@ -15,8 +15,6 @@ class PokerAssistant:
         self.hero_info = hero_info
 
         self.game_state = game_statem
-
-        self.hero_action = hero_action
 
     # ------------------------------------------------------------------------------------------------
 
@@ -308,16 +306,10 @@ class PokerAssistant:
                         break
 
                 if button_coordinates and len(button_coordinates) == 2:
-
-                    self.hero_action.execute_action(
-                        button_coordinates, extracted_action, action_amount_match
-                    )
-
                     print(
                         f"Hero ACTION: {extracted_action} {action_amount_match} dollars. Go!"
                     )
                 else:
-                    self.hero_action.execute_action(None, "Fold", None)
                     print(
                         f"{Fore.RED}No matching button found for action '{extracted_action}'."
                     )
@@ -352,9 +344,9 @@ class PokerAssistant:
 
         # Prioritize "Fold" if available, else use "Check"
         if fold_coordinates:
-            self.hero_action.execute_action(fold_coordinates, "Fold", 0)
+            print(f"{Fore.YELLOW}Suggested action: Fold")
         elif check_coordinates:
-            self.hero_action.execute_action(check_coordinates, "Check", 0)
+            print(f"{Fore.YELLOW}Suggested action: Check")
         else:
             print(
                 f"{Fore.RED} execute_check_or_fold(): Neither 'Check' nor 'Fold' action available."

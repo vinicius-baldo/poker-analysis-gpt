@@ -6,7 +6,6 @@ from colorama import init
 
 from game_state import GameState
 from gui import GUI
-from hero_action import HeroAction
 from hero_hand_range import PokerHandRangeDetector
 from hero_info import HeroInfo
 from poker_assistant import PokerAssistant
@@ -35,22 +34,17 @@ def main():
 
     if poker_window is not None:
 
-        hero_action = HeroAction(poker_window)
-
         hero_info = HeroInfo()
         hero_hand_range = PokerHandRangeDetector()
 
-        game_state = GameState(hero_action)
-        poker_assistant = PokerAssistant(
-            openai_client, hero_info, game_state, hero_action
-        )
+        game_state = GameState()
+        poker_assistant = PokerAssistant(openai_client, hero_info, game_state)
 
         gui = GUI(game_state, poker_assistant)
         read_poker_table = ReadPokerTable(
             poker_window,
             hero_info,
             hero_hand_range,
-            hero_action,
             poker_assistant,
             game_state,
         )

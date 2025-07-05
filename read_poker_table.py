@@ -22,7 +22,6 @@ class ReadPokerTable:
         poker_window,
         hero_info,
         hero_hand_range,
-        hero_action,
         poker_assistant,
         game_state,
     ):
@@ -32,8 +31,6 @@ class ReadPokerTable:
         self.hero_info = hero_info
 
         self.hero_hand_range = hero_hand_range
-
-        self.hero_action = hero_action
 
         self.game_state = game_state
 
@@ -320,7 +317,9 @@ class ReadPokerTable:
                             )
 
                         else:
-                            self.hero_action.execute_action(None, "Fold", None)
+                            print(
+                                f"{Fore.YELLOW}Suggested action: Fold (no matching button found)"
+                            )
                             self.game_state.update_player(
                                 self.game_state.hero_player_number, action="Fold"
                             )
@@ -359,7 +358,7 @@ class ReadPokerTable:
         if action_result is not None:
             self.game_state.add_log_entry(
                 {
-                    "method": "update_hero_action",
+                    "method": "update_hero_analysis",
                     "Action": action_result["Action"],
                     "Amount": action_result["Amount"],
                     "Tactic": action_result["Tactic"],
@@ -1341,8 +1340,8 @@ class ReadPokerTable:
             # except Exception as e:
             # print(f"Error in continuous detection: {e}")
 
-    def continuous_detection_hero_action_buttons(self):
-        """Continuously detect hero buttons."""
+    def continuous_detection_hero_available_actions(self):
+        """Continuously detect hero available actions for analysis."""
         while True:
             # try:
             if not self.window:
@@ -1433,8 +1432,8 @@ class ReadPokerTable:
             target=self.continuous_detection_total_pot_size
         )
 
-        hero_buttons_thread = threading.Thread(
-            target=self.continuous_detection_hero_action_buttons
+        hero_actions_thread = threading.Thread(
+            target=self.continuous_detection_hero_available_actions
         )
 
         action_detection_thread1.start()
@@ -1449,4 +1448,4 @@ class ReadPokerTable:
         cards_detection_thread.start()
         player_cards_detection_thread.start()
         pot_detection_thread.start()
-        hero_buttons_thread.start()
+        hero_actions_thread.start()
