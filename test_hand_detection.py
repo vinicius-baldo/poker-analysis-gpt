@@ -32,7 +32,6 @@ from hand_strength_analyzer import HandStrengthAnalyzer
 from hero_hand_range import PokerHandRangeDetector
 from hero_info import HeroInfo
 from poker_assistant import PokerAssistant
-from read_poker_table import ReadPokerTable
 from read_poker_table_dynamic import ReadPokerTableDynamic
 
 
