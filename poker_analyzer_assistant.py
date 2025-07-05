@@ -136,12 +136,12 @@ class PokerAnalyzerAssistant:
             start_time = time.time()
 
             response = self.client.chat.completions.create(
-                model="gpt-4-1106-preview",
+                model="gpt-4o",
                 messages=[
                     {
                         "role": "system",
                         "content": f"""
-                        You are a professional poker analyst and coach. Your objective is to analyze real-time online poker data from a Texas Holdem game and provide strategic insights and recommendations.
+                        You are a professional poker analyst and coach. Your objective is to analyze real-time online poker data from a dynamic Texas Holdem game (2-9 players, Cash/Tournament) and provide strategic insights and recommendations.
 
                         --------------------------
 
@@ -203,17 +203,17 @@ class PokerAnalyzerAssistant:
 
             end_time = time.time()
             print(
-                f"{Fore.GREEN}GPT-4 analysis completed in {end_time - start_time:.2f} seconds"
+                f"{Fore.GREEN}GPT-4o analysis completed in {end_time - start_time:.2f} seconds"
             )
 
             if response.choices and len(response.choices) > 0:
                 return response.choices[0].message.content
             else:
-                print(f"{Fore.RED}No response received from GPT-4")
+                print(f"{Fore.RED}No response received from GPT-4o")
                 return None
 
         except Exception as e:
-            print(f"{Fore.RED}Error in analyze_game_state_with_gpt4: {e}")
+            print(f"{Fore.RED}Error in analyze_game_state_with_gpt4o: {e}")
             return None
 
     def extract_analysis_from_gpt4_output(self, gpt4_output):
@@ -270,7 +270,7 @@ class PokerAnalyzerAssistant:
             formatted_data = self.format_historical_data(historical_data)
 
             response = self.client.chat.completions.create(
-                model="gpt-4-1106-preview",
+                model="gpt-4o",
                 messages=[
                     {
                         "role": "system",
@@ -297,11 +297,11 @@ class PokerAnalyzerAssistant:
                 analysis_text = response.choices[0].message.content
                 return self.parse_and_update_player_analysis(analysis_text)
             else:
-                print(f"{Fore.RED}No player analysis response received")
+                print(f"{Fore.RED}No player analysis response received from GPT-4o")
                 return None
 
         except Exception as e:
-            print(f"{Fore.RED}Error in analyze_players_gpt4: {e}")
+            print(f"{Fore.RED}Error in analyze_players_gpt4o: {e}")
             return None
 
     def format_historical_data(self, historical_data):

@@ -63,8 +63,8 @@ class PokerAssistant:
 
         active_player_analysis = ""
         # -----------------------------------------
-        # Loop through all 6 players
-        for player_number in range(1, 7):  # range(1, 7) generates numbers from 1 to 6
+        # Loop through all players (2-9 supported)
+        for player_number in range(1, 10):  # range(1, 10) generates numbers from 1 to 9
 
             player_info = self.game_state.players[player_number]
             player_last_action = player_info.get("action")
@@ -99,7 +99,7 @@ class PokerAssistant:
                         '''
                         ---------------------------
 
-                        #Texas Holdem(6 Players, No-Limit, Cash game) Poker data:
+                        #Texas Holdem (2-9 Players, No-Limit, Cash/Tournament) Poker data:
                         '''
                         {realtime_game_data}
                         Heros Players Turn:
@@ -133,14 +133,14 @@ class PokerAssistant:
             )
 
             response = self.client.chat.completions.create(
-                model="gpt-4-1106-preview",
+                model="gpt-4o",
                 # model=  "gpt-3.5-turbo",
                 messages=[
                     {
                         "role": "system",
                         "content": f"""
                         You are Hero player. 
-                        Your objective is to analyze real-time online poker data from a 6-max Online Texas Holdem (No Limit, Cash game) and suggest the next action for the hero.
+                        Your objective is to analyze real-time online poker data from a dynamic Texas Holdem game (2-9 players, No Limit, Cash/Tournament) and suggest the next action for the hero.
 
                         {actions_prompt}
                      
@@ -382,15 +382,15 @@ class PokerAssistant:
 
             start_time = time.time()  # Record the start time before making the API call
 
-            print("analyze_players_gpt4() -> Analyzing players with GPT-4 Turbo...")
+            print("analyze_players_gpt4() -> Analyzing players with GPT-4o...")
 
             response = self.client.chat.completions.create(
-                model="gpt-4-1106-preview",
+                model="gpt-4o",
                 messages=[
                     {
                         "role": "system",
                         "content": """
-                    Your task is to analyze historical game data from a 6-player Texas Holdem Online poker game (No-limit, Cash) to develop strategies for the Hero player to exploit opponents weaknesses. 
+                    Your task is to analyze historical game data from a dynamic Texas Holdem Online poker game (2-9 players, No-limit, Cash/Tournament) to develop strategies for the Hero player to exploit opponents weaknesses. 
                      
                     The analysis should be nuanced and comprehensive, taking into account a wide array of behavioral data and patterns( action patterns, action timings, bet sizing, positions, ranges, psychology etc). 
                     Always use LOGIC and REASONING. 
@@ -412,8 +412,6 @@ class PokerAssistant:
                     
                     --------------------------------------------------
                     
-                    #Limitations:
-                    - Do NOT output data for the Hero.
                      
                     OUTPUT JSON FORMAT:
                     {
@@ -463,7 +461,7 @@ class PokerAssistant:
                 self.parse_and_update_player_analysis(gpt_response)
 
         except Exception as e:
-            print(f"An error occurred during GPT-4 analysis: {e}")
+            print(f"An error occurred during GPT-4o analysis: {e}")
 
     def parse_and_update_player_analysis(self, player_analysis_json):
 
@@ -486,7 +484,7 @@ class PokerAssistant:
                 f"Player{player_number}:\n{player_type_str}\n{exploitation_strategy_str}\n"
             )
 
-            if 1 <= player_number <= 6:
+            if 1 <= player_number <= 9:
                 self.game_state.update_player(
                     player_number,
                     player_type=player_type_str,

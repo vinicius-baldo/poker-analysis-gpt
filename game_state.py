@@ -599,7 +599,7 @@ class GameState:
                 # Audio removed for faster text-based display
                 pass
 
-            # 1 player_number       ( 1 - 6 )
+            # 1 player_number       ( 1 - 9 )
             # 2 player_role         (dealer, small blind, big blind)
             # 3 action              (fold, raise, call etc.)
             # 4 amount              (number)

@@ -13,7 +13,7 @@ PokerGPT is a sophisticated poker analysis tool designed to help you improve you
 
 ### 🤖 **AI-Powered Insights**
 
-- **GPT-4 Integration**: Uses OpenAI's GPT-4 for advanced poker analysis
+- **GPT-4o Integration**: Uses OpenAI's latest GPT-4o (Omni) for advanced poker analysis
 - **Strategic Recommendations**: Provides detailed analysis of game situations
 - **Player Tendency Analysis**: Identifies opponent playing styles and patterns
 - **Hand Strength Evaluation**: Analyzes your hand relative to the board and opponent ranges
@@ -80,7 +80,7 @@ PokerGPT is a sophisticated poker analysis tool designed to help you improve you
 ## Prerequisites
 
 - Python 3.8 or higher
-- Access to OpenAI GPT-4 API
+- Access to OpenAI GPT-4o API
 - Tesseract OCR for text recognition
 - PokerStars client
 
@@ -146,7 +146,7 @@ python poker_analyzer.py
 
 #### **Analysis Sections**
 
-- **AI Analysis & Recommendations**: Detailed GPT-4 analysis with hand strength
+- **AI Analysis & Recommendations**: Detailed GPT-4o analysis with hand strength
 - **Hand Strength Analysis**: Professional hand evaluation and recommendations
 - **Opponent Range Analysis**: Estimated hand ranges for all opponents
 - **Player Tendency Analysis**: Real-time player profiling and exploitation strategies
@@ -235,7 +235,7 @@ python poker_analyzer.py
 - **Screen Resolution**: Tested on 1920x1080, may need adjustments for other resolutions
 - **Table Layout**: Requires specific PokerStars table settings
 - **OCR Accuracy**: Depends on screen clarity and text recognition
-- **API Dependencies**: Requires active internet connection for GPT-4 analysis
+- **API Dependencies**: Requires active internet connection for GPT-4o analysis
 - **Hand Strength**: Based on general charts, may not account for specific game dynamics
 
 ## Troubleshooting

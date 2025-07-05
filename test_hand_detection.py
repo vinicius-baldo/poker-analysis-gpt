@@ -91,7 +91,9 @@ class HandDetectionTester:
             print(f"  Notation: {notation}")
 
             # Test analysis
-            analysis = self.hand_analyzer.analyze_hero_hand(hand, "BTN", 100, 10, 6, [])
+            analysis = self.hand_analyzer.analyze_hero_hand(
+                hand, "BTN", 100, 10, 6, []
+            )  # Using 6 players for testing
             print(f"  Category: {analysis.get('category', 'N/A')}")
             print(f"  Strength: {analysis.get('strength', 'N/A')}")
             print(f"  Recommendation: {analysis.get('recommendation', 'N/A')}")
@@ -165,7 +167,9 @@ class HandDetectionTester:
         pairs = [["Ah", "Ad"], ["Kh", "Kd"], ["Qh", "Qd"], ["Jh", "Jd"]]
         print("Testing pairs:")
         for pair in pairs:
-            analysis = self.hand_analyzer.analyze_hero_hand(pair, "BTN", 100, 10, 6, [])
+            analysis = self.hand_analyzer.analyze_hero_hand(
+                pair, "BTN", 100, 10, 6, []
+            )  # Using 6 players for testing
             print(
                 f"  {pair} -> {analysis.get('category', 'N/A')} (Strength: {analysis.get('strength', 'N/A')})"
             )
@@ -175,10 +179,10 @@ class HandDetectionTester:
         offsuit = ["Ah", "Kd"]
 
         suited_analysis = self.hand_analyzer.analyze_hero_hand(
-            suited, "BTN", 100, 10, 6, []
+            suited, "BTN", 100, 10, 6, []  # Using 6 players for testing
         )
         offsuit_analysis = self.hand_analyzer.analyze_hero_hand(
-            offsuit, "BTN", 100, 10, 6, []
+            offsuit, "BTN", 100, 10, 6, []  # Using 6 players for testing
         )
 
         print(
@@ -199,7 +203,7 @@ class HandDetectionTester:
 
         for position in positions:
             analysis = self.hand_analyzer.analyze_hero_hand(
-                test_hand, position, 100, 10, 6, []
+                test_hand, position, 100, 10, 6, []  # Using 6 players for testing
             )
             print(
                 f"  {position}: {analysis.get('recommendation', 'N/A')} - {analysis.get('analysis', 'N/A')[:50]}..."

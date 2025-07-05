@@ -83,7 +83,7 @@ class ReadPokerTableDynamic:
 
     def generate_player_regions(self):
         """Generate player regions based on the maximum number of players."""
-        # Base regions for 6 players (standard)
+        # Base regions for 6 players (standard configuration)
         base_regions = {
             1: {
                 "stack": (0.467, 0.732),

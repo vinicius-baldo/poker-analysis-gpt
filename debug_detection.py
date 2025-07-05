@@ -104,7 +104,7 @@ class DetectionDebugger:
 
         try:
             analysis = self.hand_analyzer.analyze_hero_hand(
-                hero_cards, "BTN", 100, 10, 6, []
+                hero_cards, "BTN", 100, 10, 6, []  # Using 6 players for testing
             )
 
             print(f"    {Fore.MAGENTA}Analysis:")
@@ -194,7 +194,7 @@ class DetectionDebugger:
 
         try:
             analysis = self.hand_analyzer.analyze_hero_hand(
-                cards, "BTN", 100, 10, 6, []
+                cards, "BTN", 100, 10, 6, []  # Using 6 players for testing
             )
 
             print(f"Hand notation: {analysis.get('hand_notation', 'N/A')}")

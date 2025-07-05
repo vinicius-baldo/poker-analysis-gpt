@@ -279,7 +279,7 @@ def should_play_hand(
                 return True
             else:
                 return False
-        else:  # 4-6 players
+        else:  # 4-6 players (short-handed)
             return True
 
     return False
@@ -471,21 +471,4 @@ def get_post_flop_recommendation(
         return "fold", "No made hand - fold"
 
 
-# Example usage
-if __name__ == "__main__":
-    print(get_hand_strength("AKs"))  # Should return 277
-    print(get_hand_strength("TTo"))  # Should return 120
-    print(get_hand_strength("72o"))  # Should return 1
-
-    print(get_hand_category("AKs"))  # Should return "premium"
-    print(get_hand_category("72o"))  # Should return "trash"
-
-    print(should_play_hand("AKs", "BTN", 100, 10, 6))  # Should return True
-    print(should_play_hand("72o", "UTG", 100, 10, 9))  # Should return False
-
-    print(
-        get_hand_action_recommendation("AKs", "BTN", 100, 10, 6, [])
-    )  # Should return "raise"
-    print(
-        get_hand_action_recommendation("72o", "UTG", 100, 10, 9, [])
-    )  # Should return "fold"
+# Should return "fold"

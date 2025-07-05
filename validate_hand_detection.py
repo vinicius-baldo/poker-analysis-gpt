@@ -78,7 +78,7 @@ class HandDetectionValidator:
 
         # Get analysis
         analysis = self.hand_analyzer.analyze_hero_hand(
-            hero_cards, "BTN", 100, 10, 6, []
+            hero_cards, "BTN", 100, 10, 6, []  # Using 6 players for testing
         )
 
         print(f"Hero cards: {hero_cards}")
